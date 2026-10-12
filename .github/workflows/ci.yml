@@ -2,8 +2,9 @@ name: CI & Publish
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "master"]
   pull_request:
+    branches: ["main", "master"]
 
 env:
   REGISTRY: ghcr.io
@@ -51,7 +52,7 @@ jobs:
 
   publish-backend:
     needs: [detect-changes, backend-test]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.detect-changes.outputs.backend == 'true'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -103,7 +104,7 @@ jobs:
 
   publish-frontend:
     needs: [detect-changes, frontend-test]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.detect-changes.outputs.frontend == 'true'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && needs.detect-changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
